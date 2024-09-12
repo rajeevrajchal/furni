@@ -1,0 +1,12 @@
+@import 'combine.scss';
+@import './button.scss';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}

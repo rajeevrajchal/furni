@@ -1,0 +1,44 @@
+@mixin buttonPadding () {
+    & {
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        padding: $sm $md;
+    }
+}
+
+@mixin roundedButton () {
+    & {
+        border-radius: $sm;
+    }
+}
+
+button {
+    outline: none;
+    border: none;
+    @include buttonPadding();
+    @include roundedButton();
+
+    &:focus {
+        outline: none;
+    }
+
+
+}
+
+.btn\:default {
+
+    &:hover {
+        cursor: pointer;
+        background: green;
+    }
+}
+
+.btn\:primary {
+    background: red;
+
+    &:hover {
+        cursor: pointer;
+        background: green;
+    }
+}
