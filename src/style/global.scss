@@ -10,3 +10,9 @@
 * {
     margin: 0;
 }
+
+body {
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

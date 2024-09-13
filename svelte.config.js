@@ -20,6 +20,7 @@ const config = {
 			'@style': './src/style/*',
 			'@comp': './src/lib/components/*',
 			'@constants': './src/lib/constants/*',
+			'@tools': './src/lib/tools/*',
 		}
 	}
 };
