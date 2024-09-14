@@ -1,17 +1,7 @@
 <script lang="ts">
-	import { TouchInteraction } from '$lib/tools/TouchInteraction';
+	import Card from '@comp/card.svelte';
 	import Navbar from '@comp/navbar.svelte';
-
-	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
-
-	if (browser) {
-		const touchInteraction = new TouchInteraction(document.getElementById('home') || document.body);
-
-		onMount(() => {
-			touchInteraction.enableTouchEvents();
-		});
-	}
+	import { AppRoute } from '@constants/app-route';
 </script>
 
 <main id="home">
@@ -19,10 +9,75 @@
 	<div class="container">
 		<h1>Page</h1>
 		<p>This is a page</p>
+		<a href={AppRoute.template}> Template </a>
 	</div>
-	<div class="box">
-		<p>I am box, moving up and down</p>
-	</div>
+	<Card>
+		<h2>Card Title</h2>
+		<p>
+			This is a longer text content for the card. It demonstrates how the card can contain more
+			information and still be draggable. The card's content can overflow, and users can drag it up
+			to reveal more.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus
+			hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh
+			porttitor. Ut in nulla enim.
+		</p>
+		<p>
+			Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum
+			feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit
+			odio. Proin quis tortor orci.
+		</p>
+		<p>
+			Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus
+			condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus
+			eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.
+		</p>
+
+		<h2>main</h2>
+		<p>
+			This is a longer text content for the card. It demonstrates how the card can contain more
+			information and still be draggable. The card's content can overflow, and users can drag it up
+			to reveal more.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus
+			hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh
+			porttitor. Ut in nulla enim.
+		</p>
+		<p>
+			Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum
+			feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit
+			odio. Proin quis tortor orci.
+		</p>
+		<p>
+			Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus
+			condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus
+			eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.
+		</p>
+
+		<h2>main 2</h2>
+		<p>
+			This is a longer text content for the card. It demonstrates how the card can contain more
+			information and still be draggable. The card's content can overflow, and users can drag it up
+			to reveal more.
+		</p>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris. Vivamus
+			hendrerit arcu sed erat molestie vehicula. Sed auctor neque eu tellus rhoncus ut eleifend nibh
+			porttitor. Ut in nulla enim.
+		</p>
+		<p>
+			Phasellus molestie magna non est bibendum non venenatis nisl tempor. Suspendisse dictum
+			feugiat nisl ut dapibus. Mauris iaculis porttitor posuere. Praesent id metus massa, ut blandit
+			odio. Proin quis tortor orci.
+		</p>
+		<p>
+			Etiam at risus et justo dignissim congue. Donec congue lacinia dui, a porttitor lectus
+			condimentum laoreet. Nunc eu ullamcorper orci. Quisque eget odio ac lectus vestibulum faucibus
+			eget in metus. In pellentesque faucibus vestibulum. Nulla at nulla justo, eget luctus tortor.
+		</p>
+	</Card>
 </main>
 
 <style lang="scss">
@@ -33,11 +88,12 @@
 		display: flex;
 		flex-direction: column;
 		align-items: start;
+		background: lightsalmon;
 		@include pagePadding;
 	}
 
 	.container {
-		flex: 1;
+		height: 75vh;
 		width: 100%;
 		padding: $md 0;
 		display: flex;
@@ -45,10 +101,8 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.box {
-		background: $primary-color;
-		color: $text-white;
-		height: 20vh;
-		width: 100%;
+
+	:global(body) {
+		overflow: hidden;
 	}
 </style>
