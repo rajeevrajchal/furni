@@ -3,13 +3,13 @@ import gsap from 'gsap';
 export class TouchInteraction {
 	public startY: number | null = null;
 	public startHeight: number = 0;
-	private maxHeight: number = 900;
 	private minHeight: number = 270;
 	private scrollThreshold: number = 400;
 
 	constructor(
 		public element: HTMLElement,
-		private contentElement: HTMLElement
+		private contentElement: HTMLElement,
+		private maxHeight: number
 	) {}
 
 	public enableTouchEvents = () => {

@@ -1,16 +1,12 @@
 <script lang="ts">
 	import Card from '@comp/card.svelte';
+	import Container from '@comp/container.svelte';
 	import Navbar from '@comp/navbar.svelte';
-	import { AppRoute } from '@constants/app-route';
 </script>
 
 <main id="home">
 	<Navbar />
-	<div class="container">
-		<h1>Page</h1>
-		<p>This is a page</p>
-		<a href={AppRoute.template}> Template </a>
-	</div>
+	<Container />
 	<Card>
 		<h2>Card Title</h2>
 		<p>
@@ -89,17 +85,6 @@
 		flex-direction: column;
 		align-items: start;
 		background: lightsalmon;
-		@include pagePadding;
-	}
-
-	.container {
-		height: 75vh;
-		width: 100%;
-		padding: $md 0;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
 	}
 
 	:global(body) {
