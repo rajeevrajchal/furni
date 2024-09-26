@@ -20,18 +20,41 @@
 		return ctx;
 	}
 
+	const makeHouse = () => {
+		ctx.lineWidth = 10;
+
+		// Wall
+		ctx.strokeRect(75, 140, 150, 110);
+
+		// Door
+		ctx.fillRect(160, 190, 40, 60);
+
+		// Roof
+		ctx.beginPath();
+		ctx.moveTo(50, 140);
+		ctx.lineTo(150, 60);
+		ctx.lineTo(250, 140);
+		ctx.closePath();
+		ctx.stroke();
+	};
+
+	const line = () => {
+		ctx.lineWidth = 5;
+		ctx.beginPath();
+		ctx.moveTo(280, 190);
+		ctx.lineTo(380, 250);
+		ctx.stroke();
+	};
+
 	$effect(() => {
 		if (!browser || !canvas) return;
 		ctx = setupCanvas(canvas);
-		ctx.lineWidth = 5;
-		ctx.beginPath();
-		ctx.moveTo(100, 100);
-		ctx.lineTo(200, 200);
-		ctx.stroke();
 
-		createBlock('green', 0, 0);
-		createBlock('red', 40, 40);
-		createBlock('blue', 0, 200);
+		makeHouse();
+		line();
+		// createBlock('green', 0, 0);
+		// createBlock('red', 40, 40);
+		// createBlock('blue', 0, 200);
 	});
 </script>
 

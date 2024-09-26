@@ -21,6 +21,7 @@ const config = {
 			'@comp': './src/lib/components/*',
 			'@constants': './src/lib/constants/*',
 			'@tools': './src/lib/tools/*',
+			'@stores': './src/lib/stores/*',
 		}
 	}
 };

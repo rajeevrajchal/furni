@@ -18,27 +18,19 @@ button {
     border: none;
     @include buttonPadding();
     @include roundedButton();
+    cursor: pointer;
 
     &:focus {
         outline: none;
     }
 
-
-}
-
-.btn\:default {
-
     &:hover {
-        cursor: pointer;
-        background: green;
+        filter: brightness(0.9);
     }
+
 }
+
 
 .btn\:primary {
     background: red;
-
-    &:hover {
-        cursor: pointer;
-        background: green;
-    }
 }
