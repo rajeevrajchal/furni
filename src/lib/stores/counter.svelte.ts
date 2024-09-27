@@ -14,6 +14,7 @@ export class CounterStore {
 
 }
 
+export const counter = new CounterStore()
 
 export const COUNTER_CONTEXT_KEY = Symbol('counter');
 
