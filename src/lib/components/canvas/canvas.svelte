@@ -59,30 +59,29 @@
 	};
 
 	const simpleDraw = () => {
-		ctx.fillRect(25, 25, 100, 100);
+		ctx.fillRect(100, 100, 125, 125);
 		ctx.fillStyle = 'red';
-		ctx.clearRect(45, 45, 60, 60);
-		ctx.strokeRect(50, 50, 50, 50);
+		ctx.clearRect(75, 75, 95, 95);
+		ctx.strokeRect(80, 80, 80, 80);
 	};
 
-	const line = () => {
-		ctx.lineWidth = 5;
-		ctx.beginPath();
-		ctx.moveTo(10, 10);
-		ctx.lineTo(100, 10);
-		ctx.lineTo(100, 80);
-		ctx.lineTo(10, 80);
-		ctx.lineTo(10, 10);
-		ctx.closePath();
-		ctx.stroke();
-	};
+	// const line = () => {
+	// 	ctx.lineWidth = 5;
+	// 	ctx.beginPath();
+	// 	ctx.moveTo(10, 10);
+	// 	ctx.lineTo(100, 10);
+	// 	ctx.lineTo(100, 80);
+	// 	ctx.lineTo(10, 80);
+	// 	ctx.lineTo(10, 10);
+	// 	ctx.closePath();
+	// 	ctx.stroke();
+	// };
 
 	$effect(() => {
 		if (!browser || !canvas) return;
 		ctx = setupCanvas(canvas);
-		line();
-		simpleDraw();
 		makeSmiley();
+		simpleDraw();
 	});
 </script>
 
