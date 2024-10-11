@@ -37,10 +37,12 @@
 			y: 0
 		}
 	});
+	let showBomb: boolean = $state(false);
 
 	let PARAMS = {
 		playerState: playerState,
-		currentPlayer: currentPlayer
+		currentPlayer: currentPlayer,
+		showBomb: showBomb
 	};
 
 	const player = pane.addBinding(PARAMS, 'currentPlayer', {
@@ -64,6 +66,26 @@
 	});
 	gameState.on('change', (ev) => {
 		playerState = ev.value;
+	});
+	const showBombPane = pane.addBinding(PARAMS, 'showBomb', {
+		label: 'Show Bomb'
+	});
+	showBombPane.on('change', (ev) => {
+		showBomb = ev.value;
+	});
+	const resetBoard = pane.addButton({
+		title: 'Reset Board',
+		label: 'Reset Board'
+	});
+
+	resetBoard.on('click', () => {
+		backgroundBuilding = [];
+		mainBuilding = [];
+		// reset canvas
+		ctx?.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		generateBuildings('background');
+		generateBuildings('main');
+		setUpCanvas();
 	});
 
 	const getRandomLights = () => {
@@ -285,7 +307,7 @@
 	};
 
 	const drawBomb = () => {
-		if (ctx === null) return;
+		if (ctx === null || !showBomb) return;
 		ctx.save();
 		ctx.translate(bomb.x, bomb.y);
 
@@ -377,7 +399,6 @@
 	const handleResize = () => {
 		setUpCanvas();
 		calculateScale();
-
 		initializeBombPosition();
 	};
 
