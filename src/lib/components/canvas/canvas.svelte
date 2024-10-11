@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { onDestroy, onMount } from 'svelte';
+	import { Pane } from 'tweakpane';
+	const pane = new Pane();
 
 	let canvas: HTMLCanvasElement | null = $state(null);
 	let ctx: CanvasRenderingContext2D | null = $state(null);
@@ -15,6 +17,54 @@
 		height: number;
 		lightsOn: boolean[];
 	}[] = $state([]);
+
+	let scale: number = $state(1);
+
+	let playerState: 'aiming' | 'celebrating' | 'in-flight' = $state('aiming');
+	let currentPlayer: number = $state(1);
+	let bomb: {
+		x: number;
+		y: number;
+		velocity: {
+			x: number;
+			y: number;
+		};
+	} = $state({
+		x: 0,
+		y: 0,
+		velocity: {
+			x: 0,
+			y: 0
+		}
+	});
+
+	let PARAMS = {
+		playerState: playerState,
+		currentPlayer: currentPlayer
+	};
+
+	const player = pane.addBinding(PARAMS, 'currentPlayer', {
+		label: 'Current Player',
+		options: {
+			'player 1': 1,
+			'player 2': 2
+		}
+	});
+	player.on('change', (ev) => {
+		currentPlayer = ev.value;
+	});
+
+	const gameState = pane.addBinding(PARAMS, 'playerState', {
+		label: 'Game State',
+		options: {
+			aiming: 'aiming',
+			'in flight': 'in-flight',
+			celebrating: 'celebrating'
+		}
+	});
+	gameState.on('change', (ev) => {
+		playerState = ev.value;
+	});
 
 	const getRandomLights = () => {
 		const lightsOn = [];
@@ -78,12 +128,12 @@
 		if (ctx === null) return;
 
 		// sky
-		const gradient = ctx.createLinearGradient(0, 0, 0, window.innerHeight);
+		const gradient = ctx.createLinearGradient(0, 0, 0, window.innerHeight / scale);
 		gradient.addColorStop(0, 'hsl(210, 100%, 10%)');
 		gradient.addColorStop(1, 'hsl(210, 100%, 20%)');
 
 		ctx.fillStyle = gradient;
-		ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+		ctx.fillRect(0, 0, window.innerWidth / scale, window.innerHeight / scale);
 
 		// moon
 		ctx.beginPath();
@@ -121,7 +171,13 @@
 		ctx.beginPath();
 		ctx.moveTo(-24, 60);
 
-		ctx.quadraticCurveTo(-54, 55, -38, 22);
+		if (currentPlayer === 1 && playerState === 'aiming' && player === 1) {
+			ctx.quadraticCurveTo(-54, 73, -38, 117);
+		} else if (playerState === 'celebrating' && currentPlayer === player) {
+			ctx.quadraticCurveTo(-54, 73, -38, 117);
+		} else {
+			ctx.quadraticCurveTo(-54, 55, -38, 22);
+		}
 
 		ctx.stroke();
 	};
@@ -134,9 +190,63 @@
 		ctx.beginPath();
 		ctx.moveTo(+24, 60);
 
-		ctx.quadraticCurveTo(+54, 55, +38, 22);
+		if (currentPlayer === 2 && playerState === 'aiming' && player === 2) {
+			ctx.quadraticCurveTo(+54, 73, +38, 117);
+		} else if (playerState === 'celebrating' && currentPlayer === player) {
+			ctx.quadraticCurveTo(+54, 73, +38, 117);
+		} else {
+			ctx.quadraticCurveTo(+54, 55, +38, 22);
+		}
 
 		ctx.stroke();
+	};
+
+	const drawGorillaFace = (player: number) => {
+		if (ctx === null) return;
+		ctx.fillStyle = 'black';
+		ctx.beginPath();
+		ctx.arc(0, 75, 9, 0, Math.PI * 2);
+		ctx.moveTo(-3.5, 88);
+		ctx.arc(-3.5, 85, 4, 0, Math.PI * 2);
+		ctx.moveTo(+3.5, 88);
+		ctx.arc(+3.5, 85, 4, 0, Math.PI * 2);
+		ctx.fill();
+
+		ctx.fillStyle = 'white';
+		ctx.beginPath();
+		ctx.arc(-3.5, 85, 1.5, 0, Math.PI * 2);
+		ctx.moveTo(+3.5, 88);
+		ctx.arc(+3.5, 85, 1.5, 0, Math.PI * 2);
+		ctx.fill();
+
+		ctx.strokeStyle = 'black';
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		ctx.moveTo(-3.5, 85);
+		ctx.lineTo(-3.5, 88);
+		ctx.moveTo(+3.5, 85);
+		ctx.lineTo(+3.5, 88);
+		ctx.stroke();
+
+		// nose
+		ctx.strokeStyle = 'black';
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		ctx.moveTo(0, 75);
+		ctx.lineTo(-3.5, 70);
+		ctx.lineTo(0, 70);
+		ctx.stroke();
+
+		// mouth
+		ctx.fillStyle = 'white';
+		ctx.beginPath();
+		if (currentPlayer === player && playerState === 'celebrating') {
+			ctx.arc(0, 72, 6, 0, Math.PI);
+		} else {
+			ctx.arc(0, 72, 6, Math.PI, Math.PI * 2);
+		}
+		ctx.stroke();
+		ctx.fill();
 	};
 
 	const drawGorilla = (player: number) => {
@@ -151,10 +261,40 @@
 			ctx?.translate(building.x + building.width / 2, building.height);
 
 			drawGorillaBody();
-			drawGorillaLeftArm(1);
-			drawGorillaRightArm(1);
+			drawGorillaLeftArm(player);
+			drawGorillaRightArm(player);
+			drawGorillaFace(player);
 			ctx?.restore();
 		}
+	};
+
+	const initializeBombPosition = () => {
+		const building = currentPlayer === 1 ? mainBuilding.at(1) : mainBuilding.at(-2);
+		if (building) {
+			const playerX = building.x + building.width / 2;
+			const playerY = building.height;
+
+			const playerHandOffsetX = currentPlayer === 1 ? -38 : 38;
+			const playerHandOffsetY = 107;
+
+			bomb.x = playerX + playerHandOffsetX;
+			bomb.y = playerY + playerHandOffsetY;
+			bomb.velocity.x = 0;
+			bomb.velocity.y = 0;
+		}
+	};
+
+	const drawBomb = () => {
+		if (ctx === null) return;
+		ctx.save();
+		ctx.translate(bomb.x, bomb.y);
+
+		ctx.fillStyle = 'red';
+		ctx.beginPath();
+		ctx.arc(2, 18, 8, 0, Math.PI * 2);
+		ctx.fill();
+
+		ctx.restore();
 	};
 
 	const drawBackgroundBuilding = () => {
@@ -214,19 +354,31 @@
 		ctx?.save();
 
 		ctx?.translate(0, canvas.height / dpr);
-		ctx?.scale(1, -1);
+		ctx?.scale(scale, -scale);
 
 		drawBackground();
 		drawBackgroundBuilding();
 		drawMainBuilding();
 		drawGorilla(1);
 		drawGorilla(2);
+		drawBomb();
 
 		ctx?.restore();
 	};
 
+	const calculateScale = () => {
+		const lastBuilding = mainBuilding.at(-1);
+		if (lastBuilding) {
+			const totalWidth = lastBuilding.x + lastBuilding.width;
+			scale = window.innerWidth / totalWidth;
+		}
+	};
+
 	const handleResize = () => {
 		setUpCanvas();
+		calculateScale();
+
+		initializeBombPosition();
 	};
 
 	$effect(() => {
@@ -238,6 +390,8 @@
 		if (!browser) return;
 		generateBuildings('background');
 		generateBuildings('main');
+		initializeBombPosition();
+		calculateScale();
 		window.addEventListener('resize', handleResize);
 	});
 
