@@ -39,55 +39,6 @@
 	});
 	let showBomb: boolean = $state(false);
 
-	let PARAMS = {
-		playerState: playerState,
-		currentPlayer: currentPlayer,
-		showBomb: showBomb
-	};
-
-	const player = pane.addBinding(PARAMS, 'currentPlayer', {
-		label: 'Current Player',
-		options: {
-			'player 1': 1,
-			'player 2': 2
-		}
-	});
-	player.on('change', (ev) => {
-		currentPlayer = ev.value;
-	});
-
-	const gameState = pane.addBinding(PARAMS, 'playerState', {
-		label: 'Game State',
-		options: {
-			aiming: 'aiming',
-			'in flight': 'in-flight',
-			celebrating: 'celebrating'
-		}
-	});
-	gameState.on('change', (ev) => {
-		playerState = ev.value;
-	});
-	const showBombPane = pane.addBinding(PARAMS, 'showBomb', {
-		label: 'Show Bomb'
-	});
-	showBombPane.on('change', (ev) => {
-		showBomb = ev.value;
-	});
-	const resetBoard = pane.addButton({
-		title: 'Reset Board',
-		label: 'Reset Board'
-	});
-
-	resetBoard.on('click', () => {
-		backgroundBuilding = [];
-		mainBuilding = [];
-		// reset canvas
-		ctx?.clearRect(0, 0, window.innerWidth, window.innerHeight);
-		generateBuildings('background');
-		generateBuildings('main');
-		setUpCanvas();
-	});
-
 	const getRandomLights = () => {
 		const lightsOn = [];
 		const lightsCount = 30;
@@ -362,6 +313,57 @@
 			}
 		});
 	};
+
+	// pane
+	let PARAMS = {
+		playerState: playerState,
+		currentPlayer: currentPlayer,
+		showBomb: showBomb
+	};
+
+	const player = pane.addBinding(PARAMS, 'currentPlayer', {
+		label: 'Current Player',
+		options: {
+			'player 1': 1,
+			'player 2': 2
+		}
+	});
+	player.on('change', (ev) => {
+		currentPlayer = ev.value;
+	});
+
+	const gameState = pane.addBinding(PARAMS, 'playerState', {
+		label: 'Game State',
+		options: {
+			aiming: 'aiming',
+			'in flight': 'in-flight',
+			celebrating: 'celebrating'
+		}
+	});
+	gameState.on('change', (ev) => {
+		playerState = ev.value;
+	});
+	const showBombPane = pane.addBinding(PARAMS, 'showBomb', {
+		label: 'Show Bomb'
+	});
+	showBombPane.on('change', (ev) => {
+		showBomb = ev.value;
+	});
+	const resetBoard = pane.addButton({
+		title: 'Reset Board',
+		label: 'Reset Board'
+	});
+
+	resetBoard.on('click', () => {
+		backgroundBuilding = [];
+		mainBuilding = [];
+		// reset canvas
+		ctx?.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		generateBuildings('background');
+		generateBuildings('main');
+		initializeBombPosition();
+		setUpCanvas();
+	});
 
 	const setUpCanvas = () => {
 		if (canvas === null) return;
