@@ -8,3 +8,18 @@
         padding-right: $lg
     }
 }
+
+@mixin noScrollBar () {
+    & {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

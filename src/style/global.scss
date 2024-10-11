@@ -9,6 +9,7 @@
 
 * {
 	margin: 0;
+	@include noScrollBar();
 }
 
 body {
