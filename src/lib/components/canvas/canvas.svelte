@@ -16,7 +16,7 @@
 		lightsOn: boolean[];
 	}[] = $state([]);
 
-	const getRandomLights = (buildingWidth: number) => {
+	const getRandomLights = () => {
 		const lightsOn = [];
 		const lightsCount = 30;
 		for (let i = 0; i < lightsCount; i++) {
@@ -45,7 +45,7 @@
 				x,
 				width: buildingWidth,
 				height,
-				lightsOn: getRandomLights(buildingWidth)
+				lightsOn: getRandomLights()
 			});
 		}
 	};
@@ -92,6 +92,71 @@
 		ctx.fill();
 	};
 
+	const drawGorillaBody = () => {
+		if (ctx === null) return;
+		ctx.fillStyle = 'white';
+		ctx.beginPath();
+		ctx.moveTo(0, 25);
+		ctx.lineTo(-17, 0);
+		ctx.lineTo(-30, 0);
+		ctx.lineTo(-27, 28);
+		ctx.lineTo(-30, 54);
+
+		ctx.lineTo(-21, 87);
+		ctx.lineTo(0, 94);
+		ctx.lineTo(21, 87);
+
+		ctx.lineTo(30, 54);
+		ctx.lineTo(27, 28);
+		ctx.lineTo(30, 0);
+		ctx.lineTo(17, 0);
+		ctx.fill();
+	};
+
+	const drawGorillaLeftArm = (player: number) => {
+		if (ctx === null) return;
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 16;
+
+		ctx.beginPath();
+		ctx.moveTo(-24, 60);
+
+		ctx.quadraticCurveTo(-54, 55, -38, 22);
+
+		ctx.stroke();
+	};
+
+	const drawGorillaRightArm = (player: number) => {
+		if (ctx === null) return;
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 16;
+
+		ctx.beginPath();
+		ctx.moveTo(+24, 60);
+
+		ctx.quadraticCurveTo(+54, 55, +38, 22);
+
+		ctx.stroke();
+	};
+
+	const drawGorilla = (player: number) => {
+		const building = player === 1 ? mainBuilding.at(1) : mainBuilding.at(-2);
+
+		if (building && building.x) {
+			console.log('property', {
+				x: building.x + building.width / 2,
+				y: building.height
+			});
+			ctx?.save();
+			ctx?.translate(building.x + building.width / 2, building.height);
+
+			drawGorillaBody();
+			drawGorillaLeftArm(1);
+			drawGorillaRightArm(1);
+			ctx?.restore();
+		}
+	};
+
 	const drawBackgroundBuilding = () => {
 		backgroundBuilding.forEach((building: any) => {
 			if (ctx === null) return;
@@ -101,8 +166,10 @@
 	};
 
 	const drawMainBuilding = () => {
-		mainBuilding.forEach((building: any) => {
+		mainBuilding.forEach((building: any, index: number) => {
 			if (ctx === null) return;
+			const height =
+				index === 1 || index === mainBuilding.length - 2 ? building.height - 40 : building.height;
 			ctx.fillStyle = '#4A3C68';
 			ctx.fillRect(building.x, 0, building.width, building.height);
 
@@ -113,12 +180,6 @@
 
 			const numberOfFloors = Math.ceil((building.height - gap) / (windowHeight + gap));
 			const numberOfRoomsPerFloor = Math.floor((building.width - gap) / (windowWidth + gap));
-
-			console.log('floor and rooms', {
-				numberOfFloors,
-				numberOfRoomsPerFloor,
-				building: building.lightsOn
-			});
 
 			for (let floor = 0; floor < numberOfFloors; floor++) {
 				for (let room = 0; room < numberOfRoomsPerFloor; room++) {
@@ -158,6 +219,8 @@
 		drawBackground();
 		drawBackgroundBuilding();
 		drawMainBuilding();
+		drawGorilla(1);
+		drawGorilla(2);
 
 		ctx?.restore();
 	};
