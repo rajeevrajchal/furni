@@ -22,6 +22,7 @@ const config = {
 			'@constants': './src/lib/constants/*',
 			'@tools': './src/lib/tools/*',
 			'@stores': './src/lib/stores/*',
+			'@assets': './src/lib/assets/*',
 		}
 	}
 };
