@@ -1,9 +1,9 @@
 <script>
-	import Canvas from '@comp/canvas/canvas.svelte';
+	import PixiCanvas from '@comp/canvas/pixi-canvas.svelte';
 </script>
 
 <div class="home">
-	<Canvas />
+	<PixiCanvas />
 </div>
 
 <style lang="scss">

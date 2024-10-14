@@ -34,6 +34,7 @@
 	"type": "module",
 	"dependencies": {
 		"gsap": "^3.12.5",
+		"pixi.js": "^8.5.0",
 		"tweakpane": "^4.0.4",
 		"zod": "^3.23.8"
 	}
